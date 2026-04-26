@@ -1,6 +1,6 @@
 {
   "name": "pi-minimax-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A pi coding agent extension that wraps the MiniMax mmx CLI as callable tools with self-evolving architecture",
   "license": "MIT",
   "homepage": "https://github.com/ramankarki/pi-minimax-cli",
