@@ -29,7 +29,7 @@ Build the `pi-minimax-cli` extension.
 3. If no, It should:
    1. Run `mmx -h`. scrap all the commands and options.
    2. Complete users task by directly using the updated cli.
-   3. Inject a prompt in the context to warn user that new mmx cli version has been found and ask user if they want to update the `pi-minimax-cli` extension.
+   3. Inject a prompt in the context to warn user that new mmx cli version has been found and ask user to allow pi agent to update the `pi-minimax-cli` extension.
 
 ## Success criteria
 
