@@ -1,6 +1,8 @@
 ---
 name: update-pi-minimax-cli
-description: Use this skill when user approves to build or rebuild the `pi-minimax-cli` extension.
+description: Triggers a rebuild of the pi-minimax-cli extension when mmx CLI version changes. Use when user approves with "yes", "update", or similar prompt after a version mismatch warning.
 ---
 
-Run the /build-pi-minimax-cli prompt template that is inside prompts folder.
+# Update pi-minimax-cli Extension
+
+Read `prompts/build-pi-minimax-cli.md` and follow its instructions to rebuild the extension.
