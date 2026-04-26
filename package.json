@@ -1,9 +1,20 @@
 {
   "name": "pi-minimax-cli",
   "version": "1.0.0",
+  "description": "A pi coding agent extension that wraps the MiniMax mmx CLI as callable tools with self-evolving architecture",
+  "license": "MIT",
+  "homepage": "https://github.com/ramankarki/pi-minimax-cli",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ramankarki/pi-minimax-cli"
+  },
   "keywords": [
     "pi-package",
-    "pi-minimax-cli"
+    "pi-coding-agent",
+    "minimax",
+    "mmx",
+    "cli-wrapper",
+    "ai-tools"
   ],
   "pi": {
     "extensions": [
