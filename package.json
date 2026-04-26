@@ -25,7 +25,8 @@
     ],
     "prompts": [
       "./prompts"
-    ]
+    ],
+    "image": "./minimax-cli.png"
   },
   "peerDependencies": {
     "@mariozechner/pi-coding-agent": "^0.70.2",
