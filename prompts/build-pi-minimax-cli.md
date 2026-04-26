@@ -19,12 +19,13 @@ Build the `pi-minimax-cli` extension.
    2. Check if `pi-minimax-cli` is installed as a pi package (via pi packages list).
    3. If installed as package, read the package source for reference.
    4. If neither exists, proceed to next step.
-4. If not found build from scratch
-5. Delete `pi-minimax-cli.ts` file inside `extensions/` if exists.
-6. Create new file with same name as `pi-minimax-cli.ts` inside `extensions/`.
-7. Create a new extension by following pi coding agent extension guidelines. Register the commands that you read earlier as tools.
-8. Store the `mmx` cli version in `SUPPORTED_MMX_VERSION` constant.
-9. Ask the user to reload pi session with `/reload` at the end.
+4. Check the current version with `mmx -v`.
+5. If not found or the existing extension version `SUPPORTED_MMX_VERSION` is different from the current version, build from scratch.
+6. Delete `pi-minimax-cli.ts` file inside `extensions/` if exists.
+7. Create new file with same name as `pi-minimax-cli.ts` inside `extensions/`.
+8. Create a new extension by following pi coding agent extension guidelines. Register the commands that you read earlier as tools.
+9. Store the `mmx` cli version in `SUPPORTED_MMX_VERSION` constant.
+10. Ask the user to reload pi session with `/reload` at the end.
 
 ## How the extension should work
 
