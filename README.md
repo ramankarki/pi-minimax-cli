@@ -1,6 +1,6 @@
 # pi-minimax-cli
 
-A [pi](https://github.com/mariozechner/pi-coding-agent) extension that integrates MiniMax's `mmx` CLI as callable tools.
+A [pi](https://pi.dev/) extension that integrates MiniMax's `mmx` CLI as callable tools.
 
 ## Purpose
 
@@ -64,4 +64,4 @@ pi-minimax-cli/
 
 - [MiniMax Platform](https://platform.minimax.io)
 - [mmx CLI Docs](https://platform.minimax.io/docs/token-plan/minimax-cli)
-- [pi coding agent](https://github.com/mariozechner/pi-coding-agent)
+- [pi coding agent](https://pi.dev/)
