@@ -2,7 +2,7 @@ import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 import { Type, StringEnum } from "@mariozechner/pi-ai";
 
 // Supported mmx CLI version
-const SUPPORTED_MMX_VERSION = "1.0.11";
+const SUPPORTED_MMX_VERSION = "1.0.12";
 
 /**
  * Get the current mmx CLI version
@@ -77,6 +77,7 @@ const mmxTools = [
       channels: Type.Optional(Type.Number({ description: "Audio channels (default: 1)" })),
       language: Type.Optional(Type.String({ description: "Language boost" })),
       subtitles: Type.Optional(Type.Boolean({ description: "Include subtitle timing data" })),
+      pronunciation: Type.Optional(Type.String({ description: "Custom pronunciation (repeatable, format: from/to)" })),
       out: Type.Optional(Type.String({ description: "Save audio to file" })),
       stream: Type.Optional(Type.Boolean({ description: "Stream raw audio to stdout" })),
       quiet: Type.Optional(Type.Boolean({ description: "Suppress non-essential output" })),
@@ -113,6 +114,7 @@ const mmxTools = [
       channels: Type.Optional(Type.Number({ description: "Audio channels (default: 1)" })),
       language: Type.Optional(Type.String({ description: "Language boost" })),
       subtitles: Type.Optional(Type.Boolean({ description: "Include subtitle timing data" })),
+      pronunciation: Type.Optional(Type.String({ description: "Custom pronunciation (repeatable, format: from/to)" })),
       out: Type.Optional(Type.String({ description: "Save audio to file" })),
       stream: Type.Optional(Type.Boolean({ description: "Stream raw audio to stdout" })),
       quiet: Type.Optional(Type.Boolean({ description: "Suppress non-essential output" })),
@@ -135,6 +137,8 @@ const mmxTools = [
       promptOptimizer: Type.Optional(Type.Boolean({ description: "Automatically optimize the prompt" })),
       aigcWatermark: Type.Optional(Type.Boolean({ description: "Embed AI-generated content watermark" })),
       subjectRef: Type.Optional(Type.String({ description: "Subject reference (format: type=character,image=path-or-url)" })),
+      out: Type.Optional(Type.String({ description: "Save image to exact file path (single image only)" })),
+      responseFormat: Type.Optional(StringEnum(["url", "base64"] as const)),
       outDir: Type.Optional(Type.String({ description: "Download images to directory" })),
       outPrefix: Type.Optional(Type.String({ description: "Filename prefix (default: image)" })),
       quiet: Type.Optional(Type.Boolean({ description: "Suppress non-essential output" })),
@@ -145,13 +149,13 @@ const mmxTools = [
   {
     name: "mmx_video_generate",
     label: "Video Generate",
-    description: "Generate a video (T2V: Hailuo-2.3 / 2.3-Fast / Hailuo-02 | I2V: I2V-01 / I2V-01-Director / I2V-01-live | S2V: S2V-01)",
+    description: "Generate a video (T2V: Hailuo-2.3 | I2V: Hailuo-2.3 / Hailuo-2.3-Fast | SEF: Hailuo-02 | S2V: S2V-01)",
     promptSnippet: "Generate videos from text or images using MiniMax",
     parameters: Type.Object({
-      model: Type.Optional(Type.String({ description: "Model ID (default: MiniMax-Hailuo-2.3)" })),
+      model: Type.Optional(Type.String({ description: "Model ID. T2V: MiniMax-Hailuo-2.3; I2V: MiniMax-Hailuo-2.3 or MiniMax-Hailuo-2.3-Fast; SEF: Hailuo-02; S2V: S2V-01" })),
       prompt: Type.String({ description: "Video description" }),
       firstFrame: Type.Optional(Type.String({ description: "First frame image (local path or URL)" })),
-      lastFrame: Type.Optional(Type.String({ description: "Last frame image for SEF interpolation" })),
+      lastFrame: Type.Optional(Type.String({ description: "Last frame image for SEF interpolation (requires --first-frame)" })),
       subjectImage: Type.Optional(Type.String({ description: "Subject reference image for character consistency" })),
       callbackUrl: Type.Optional(Type.String({ description: "Webhook URL for completion notification" })),
       download: Type.Optional(Type.String({ description: "Save video to file on completion" })),
@@ -192,24 +196,24 @@ const mmxTools = [
     description: "Generate a song (music-2.6 / music-2.6-free / music-2.5+ / music-2.5)",
     promptSnippet: "Generate music from text or lyrics using MiniMax",
     parameters: Type.Object({
-      prompt: Type.Optional(Type.String({ description: "Music style description" })),
+      prompt: Type.Optional(Type.String({ description: "Music style description (e.g. \"cinematic orchestral, building tension\")" })),
       lyrics: Type.Optional(Type.String({ description: "Song lyrics with structure tags" })),
       lyricsFile: Type.Optional(Type.String({ description: "Read lyrics from file (use - for stdin)" })),
-      lyricsOptimizer: Type.Optional(Type.Boolean({ description: "Auto-generate lyrics from prompt" })),
-      instrumental: Type.Optional(Type.Boolean({ description: "Generate instrumental music" })),
+      lyricsOptimizer: Type.Optional(Type.Boolean({ description: "Auto-generate lyrics from prompt (cannot be used with --lyrics or --instrumental)" })),
+      instrumental: Type.Optional(Type.Boolean({ description: "Generate instrumental music (no vocals)" })),
       vocals: Type.Optional(Type.String({ description: "Vocal style (e.g. warm male baritone)" })),
-      genre: Type.Optional(Type.String({ description: "Music genre" })),
-      mood: Type.Optional(Type.String({ description: "Mood or emotion" })),
-      instruments: Type.Optional(Type.String({ description: "Instruments to feature" })),
+      genre: Type.Optional(Type.String({ description: "Music genre (e.g. folk, pop, jazz, electronic)" })),
+      mood: Type.Optional(Type.String({ description: "Mood or emotion (e.g. warm, melancholic, uplifting)" })),
+      instruments: Type.Optional(Type.String({ description: "Instruments to feature (e.g. acoustic guitar, piano, strings)" })),
       tempo: Type.Optional(Type.String({ description: "Tempo description (fast, slow, moderate)" })),
       bpm: Type.Optional(Type.Number({ description: "Exact tempo in beats per minute" })),
       key: Type.Optional(Type.String({ description: "Musical key (e.g. C major, A minor)" })),
-      avoid: Type.Optional(Type.String({ description: "Elements to avoid" })),
-      useCase: Type.Optional(Type.String({ description: "Use case context" })),
-      structure: Type.Optional(Type.String({ description: "Song structure" })),
-      references: Type.Optional(Type.String({ description: "Reference tracks or artists" })),
+      avoid: Type.Optional(Type.String({ description: "Elements to avoid in the generated music" })),
+      useCase: Type.Optional(Type.String({ description: "Use case context (e.g. background music for video)" })),
+      structure: Type.Optional(Type.String({ description: "Song structure (e.g. verse-chorus-verse-bridge-chorus)" })),
+      references: Type.Optional(Type.String({ description: "Reference tracks or artists (e.g. similar to Ed Sheeran)" })),
       extra: Type.Optional(Type.String({ description: "Additional fine-grained requirements" })),
-      model: Type.Optional(Type.String({ description: "Model (music-2.6, music-2.6-free, music-2.5+, music-2.5)" })),
+      model: Type.Optional(Type.String({ description: "Model: music-2.6 (recommended), music-2.6-free (default, unlimited), music-2.5+, or music-2.5" })),
       outputFormat: Type.Optional(StringEnum(["hex", "url"] as const)),
       aigcWatermark: Type.Optional(Type.Boolean({ description: "Embed AI-generated content watermark" })),
       format: Type.Optional(Type.String({ description: "Audio format (default: mp3)" })),
@@ -227,17 +231,17 @@ const mmxTools = [
     description: "Generate a cover version of a song based on reference audio (music-cover / music-cover-free)",
     promptSnippet: "Generate a cover version of a song using MiniMax",
     parameters: Type.Object({
-      model: Type.Optional(Type.String({ description: "Model (music-cover, music-cover-free)" })),
-      prompt: Type.Optional(Type.String({ description: "Target cover style" })),
-      audio: Type.Optional(Type.String({ description: "URL of the reference audio" })),
-      audioFile: Type.Optional(Type.String({ description: "Local reference audio file" })),
-      lyrics: Type.Optional(Type.String({ description: "Cover lyrics" })),
-      lyricsFile: Type.Optional(Type.String({ description: "Read lyrics from file" })),
-      seed: Type.Optional(Type.Number({ description: "Random seed 0-1000000" })),
-      format: Type.Optional(Type.String({ description: "Audio format (default: mp3)" })),
-      sampleRate: Type.Optional(Type.Number({ description: "Sample rate (default: 44100)" })),
-      bitrate: Type.Optional(Type.Number({ description: "Bitrate (default: 256000)" })),
-      channel: Type.Optional(Type.Number({ description: "Channels: 1 (mono) or 2 (stereo)" })),
+      model: Type.Optional(Type.String({ description: "Model: music-cover (Token Plan), music-cover-free (Pay-as-you-go, default)" })),
+      prompt: Type.Optional(Type.String({ description: "Target cover style (e.g. \"Indie folk, acoustic guitar, warm male vocal\")" })),
+      audio: Type.Optional(Type.String({ description: "URL of the reference audio (mp3, wav, flac, etc. — 6s to 6min, max 50MB)" })),
+      audioFile: Type.Optional(Type.String({ description: "Local reference audio file (auto base64-encoded)" })),
+      lyrics: Type.Optional(Type.String({ description: "Cover lyrics (if omitted, extracted from reference audio via ASR)" })),
+      lyricsFile: Type.Optional(Type.String({ description: "Read lyrics from file (use - for stdin)" })),
+      seed: Type.Optional(Type.Number({ description: "Random seed 0-1000000 for reproducible results" })),
+      format: Type.Optional(Type.String({ description: "Audio format: mp3, wav, pcm (default: mp3)" })),
+      sampleRate: Type.Optional(Type.Number({ description: "Sample rate: 16000, 24000, 32000, 44100 (default: 44100)" })),
+      bitrate: Type.Optional(Type.Number({ description: "Bitrate: 32000, 64000, 128000, 256000 (default: 256000)" })),
+      channel: Type.Optional(Type.Number({ description: "Channels: 1 (mono) or 2 (stereo, default)" })),
       stream: Type.Optional(Type.Boolean({ description: "Stream raw audio to stdout" })),
       out: Type.Optional(Type.String({ description: "Save audio to file" })),
       quiet: Type.Optional(Type.Boolean({ description: "Suppress non-essential output" })),
@@ -263,9 +267,9 @@ const mmxTools = [
     description: "Describe an image using MiniMax VLM",
     promptSnippet: "Describe or analyze images using MiniMax vision",
     parameters: Type.Object({
-      image: Type.Optional(Type.String({ description: "Local image path or URL" })),
-      fileId: Type.Optional(Type.String({ description: "Pre-uploaded file ID" })),
-      prompt: Type.Optional(Type.String({ description: "Question about the image" })),
+      image: Type.Optional(Type.String({ description: "Local image path or URL (base64 encoded automatically)" })),
+      fileId: Type.Optional(Type.String({ description: "Pre-uploaded file ID (skips base64 conversion)" })),
+      prompt: Type.Optional(Type.String({ description: "Question about the image (default: \"Describe the image.\")" })),
       quiet: Type.Optional(Type.Boolean({ description: "Suppress non-essential output" })),
       output: Type.Optional(StringEnum(["text", "json"] as const)),
     }),
@@ -299,6 +303,17 @@ const toolCommandMap: Record<string, string[]> = {
   mmx_quota_show: ["quota", "show"],
 };
 
+// Boolean flag mappings for mmx CLI
+const booleanFlagMap: Record<string, string> = {
+  subtitles: "--subtitles",
+  promptOptimizer: "--prompt-optimizer",
+  aigcWatermark: "--aigc-watermark",
+  stream: "--stream",
+  instrumental: "--instrumental",
+  lyricsOptimizer: "--lyrics-optimizer",
+  noWait: "--no-wait",
+};
+
 export default async function (pi: ExtensionAPI) {
   // Register update command
   pi.registerCommand("update-pi-minimax-cli", {
@@ -319,7 +334,7 @@ export default async function (pi: ExtensionAPI) {
       description: tool.description,
       promptSnippet: tool.promptSnippet,
       parameters: tool.parameters,
-      async execute(_toolCallId, params, signal, onUpdate, ctx) {
+      async execute(_toolCallId, params, signal, onUpdate, _ctx) {
         // Check version and get warning if mismatch
         const versionWarning = await checkVersionAndGetWarning(pi);
 
@@ -346,24 +361,9 @@ export default async function (pi: ExtensionAPI) {
 
           if (typeof value === "boolean") {
             if (value) {
-              // Handle boolean flags - use the correct mmx flag format
-              if (key === "promptOptimizer") {
-                args.push("--prompt-optimizer");
-              } else if (key === "aigcWatermark") {
-                args.push("--aigc-watermark");
-              } else if (key === "subtitles") {
-                args.push("--subtitles");
-              } else if (key === "stream") {
-                args.push("--stream");
-              } else if (key === "instrumental") {
-                args.push("--instrumental");
-              } else if (key === "lyricsOptimizer") {
-                args.push("--lyrics-optimizer");
-              } else if (key === "noWait") {
-                args.push("--no-wait");
-              } else {
-                args.push(`--${flagKey}`);
-              }
+              // Use the mapped flag or fall back to kebab-case
+              const flag = booleanFlagMap[key] || `--${flagKey}`;
+              args.push(flag);
             }
           } else if (typeof value === "number") {
             args.push(`--${flagKey}`, String(value));
