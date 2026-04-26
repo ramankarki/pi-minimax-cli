@@ -2,23 +2,27 @@ Build the `pi-minimax-cli` extension.
 
 ## CRITICAL Guardrails
 
-1. Always follow all the steps in order.
+1. Strictly follow the steps below in order.
 2. Do not create or modify any other file except `extensions/pi-minimax-cli.ts` file.
 3. Do not install any packages on your own.
 
 ## How to create extension.
 
 1. Check if `mmx` cli exists. if not ask user to install and login by following minimax guide and exit. Here is the resource link https://platform.minimax.io/docs/token-plan/minimax-cli.
-2. Run `mmx -h`. Recursively scrap all the commands and options.
+2. Run `mmx -h`. Recursively scrap all the commands and options. Ignore these commands:
+   1. text
+   2. auth
+   3. update
+   4. config
 3. Read the current `pi-minimax-cli` extension code for reference.
-   1. Check if `pi-minimax-cli` is installed as a pi package (via pi packages list)
-   2. If installed as package, read the package source for reference.
-   3. Otherwise, check if `./extensions/pi-minimax-cli.ts` exists and read it.
+   1. Check if `./extensions/pi-minimax-cli.ts` exists, if yes read it.
+   2. Check if `pi-minimax-cli` is installed as a pi package (via pi packages list).
+   3. If installed as package, read the package source for reference.
    4. If neither exists, proceed to next step.
 4. If not found build from scratch
 5. Delete `pi-minimax-cli.ts` file inside `extensions/` if exists.
 6. Create new file with same name as `pi-minimax-cli.ts` inside `extensions/`.
-7. Create a new extension by following pi coding agent extension guidelines. Register all the commands as tools except 'text' since pi agent is already doing that.
+7. Create a new extension by following pi coding agent extension guidelines. Register the commands that you read earlier as tools.
 8. Store the `mmx` cli version in `SUPPORTED_MMX_VERSION` constant.
 9. Ask the user to reload pi session with `/reload` at the end.
 
