@@ -1,0 +1,35 @@
+{
+  "type": "module",
+  "name": "pi-minimax-cli",
+  "version": "1.0.0",
+  "keywords": [
+    "pi-minimax-cli",
+    "minimax cli wrapper",
+    "pi-package"
+  ],
+  "peerDependencies": {
+    "@mariozechner/pi-coding-agent": "^0.70.2",
+    "typebox": "^1.1.33"
+  },
+  "pi": {
+    "extensions": [
+      "./extensions"
+    ],
+    "skills": [
+      "./skills"
+    ],
+    "prompts": [
+      "./prompts"
+    ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.59.0",
+    "@typescript-eslint/parser": "^8.59.0",
+    "eslint": "^10.2.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.59.0"
+  },
+  "dependencies": {
+    "jiti": "^2.6.1"
+  }
+}
